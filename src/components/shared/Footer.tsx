@@ -1,5 +1,5 @@
 import Image from "next/image";
-import icon from "./../../../assets/social.png";
+import icon from "./../../assets/social.png";
 
 export default function Footer() {
   return (
