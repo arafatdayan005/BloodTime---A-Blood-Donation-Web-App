@@ -181,7 +181,7 @@ const Home = () => {
         </h1>
         <div className="max-w-[85%] mx-auto grid grid-cols-12 gap-4 justify-between items-center my-12">
           <div className="col-span-12 lg:col-span-6">
-            <Image src={tipsimg} alt="" className="rounded-2xl" />
+            <Image src={tipsimg} alt="tips" className="rounded-2xl" />
           </div>
 
           <div className="col-span-12 lg:col-span-6 m-2 space-y-2">

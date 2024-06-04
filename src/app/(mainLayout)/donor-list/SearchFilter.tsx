@@ -1,9 +1,6 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { DonorCards } from "./DonorCards";
-import DonorList from "./page";
 
 export const SearchFilter = () => {
   const [donors, setDonors] = useState([]);
