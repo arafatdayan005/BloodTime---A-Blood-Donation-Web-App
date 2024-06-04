@@ -3,6 +3,7 @@ import { Raleway } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/shared/Navbar";
 import Footer from "../components/shared/Footer";
+import { Providers } from "@/lib/Providers";
 
 const raleway = Raleway({ subsets: ["cyrillic"], variable: "--font-raleway" });
 
@@ -17,14 +18,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={raleway.className}
-      >
-        <Navbar />
-        <div className="pt-12 lg:pt-16 ">{children}</div>
-        <Footer/>
-      </body>
-    </html>
+    <Providers>
+      <html lang="en">
+        <body className={raleway.className}>
+          <div>{children}</div>
+        </body>
+      </html>
+    </Providers>
   );
 }

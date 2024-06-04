@@ -6,11 +6,25 @@ import Profile from "./steps/Profile";
 import Final from "./steps/Final";
 import Stepper from "./Stepper";
 import { useStepperContext } from "./StepperContext";
+import { useRegistrationMutation } from "@/redux/features/auth/authApi";
+import { useRouter } from "next/navigation";
 
 export const RegisterForm = () => {
   const [isToggled, setIsToggled] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const { userData } = useStepperContext();
+  const [registration] = useRegistrationMutation();
+  const router = useRouter();
+
+  const onSubmit = async () => {
+    const data = {
+      name: userData.name,
+      email: userData.email,
+      password: userData.password,
+    };
+    await registration(data);
+    router.push("/login");
+  };
 
   const steps = ["Account", "Personal", "Profile", "Complete"];
 
@@ -34,6 +48,11 @@ export const RegisterForm = () => {
     direction === "next" ? newStep++ : newStep--;
     // check if steps are within bounds
     newStep > 0 && newStep <= steps.length && setCurrentStep(newStep);
+
+    if (currentStep === steps.length - 1 && direction === "next") {
+      userData.age = Number(userData.age);
+      registration(userData);
+    }
   };
 
   return (
@@ -70,9 +89,7 @@ export const RegisterForm = () => {
       <div className="horizontal container">
         {isToggled && <Stepper steps={steps} currentStep={currentStep} />}
 
-        <div className="p-10 ">
-          {displayStep(currentStep)}
-        </div>
+        <div className="p-10 ">{displayStep(currentStep)}</div>
       </div>
 
       {/* navigation button */}
@@ -90,15 +107,29 @@ export const RegisterForm = () => {
           <button
             onClick={() => handleClick("next")}
             className="cursor-pointer rounded-lg bg-red-500 py-2 px-4 font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-slate-700 hover:text-white disabled:cursor-not-allowed disabled:bg-red-500"
-            disabled={currentStep === steps.length - 1 && (!userData?.name || !userData?.email || !userData?.password || !userData?.bio || !userData?.location || !userData?.bloodType || !userData?.lastDonationDate || !userData?.age)}
+            disabled={
+              currentStep === steps.length - 1 &&
+              (!userData?.name ||
+                !userData?.email ||
+                !userData?.password ||
+                !userData?.bio ||
+                !userData?.location ||
+                !userData?.bloodType ||
+                !userData?.lastDonationDate ||
+                !userData?.age)
+            }
           >
             {currentStep === steps.length - 1 ? "Confirm" : "Next"}
           </button>
         </div>
       ) : (
         <button
+          onClick={onSubmit}
+          disabled={!userData?.name || !userData?.email || !userData?.password}
           type="submit"
-          className="w-1/4 mx-auto mb-8 py-3 px-4 flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none"
+          className={`w-1/4 mx-auto mb-8 py-3 px-4 flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-700 disabled:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50 ${
+            currentStep == steps.length && "hidden"
+          }`}
         >
           Sign up
         </button>

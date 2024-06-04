@@ -1,5 +1,15 @@
 /** @type {import('next').NextConfig} */
-import withVideos from 'next-videos';
+import withVideos from "next-videos";
 
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+  },
+};
+
 export default withVideos(nextConfig);

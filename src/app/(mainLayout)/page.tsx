@@ -1,8 +1,8 @@
 import Link from "next/link";
-import video from "./../assets/v.mp4";
+import video from "./../../assets/v.mp4";
 import Image from "next/image";
-import aboutimg from "./../assets/aboutimg.jpg";
-import tipsimg from "./../assets/tipsimg.png";
+import aboutimg from "./../../assets/aboutimg.jpg";
+import tipsimg from "./../../assets/tipsimg.png";
 
 const Home = () => {
   return (

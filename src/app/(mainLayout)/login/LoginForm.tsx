@@ -1,20 +1,27 @@
+"use client"
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
+import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FieldValues, useForm } from "react-hook-form";
 
 export const LoginForm = () => {
-  //   const { register, handleSubmit } = useForm();
-  //   const dispatch = useAppDispatch();
-  //   const [login] = useLoginMutation();
-  //   const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();
+  const dispatch = useAppDispatch();
+  const [login] = useLoginMutation();
+  const router = useRouter();
 
-  //   const onSubmit = async (data: FieldValues) => {
-  //     const res = await login(data).unwrap();
-  //     const decode = jwtDecode(res.data.token);
+  const onSubmit = async (data: FieldValues) => {
+    const res = await login(data).unwrap();
+    const decode = jwtDecode(res.data.token);
 
-  //     localStorage.setItem("token", res.data.token);
+    localStorage.setItem("token", res.data.token);
 
-  //     dispatch(setUser({ user: decode, token: res.data.token }));
-  //     navigate("/");
-  //   };
+    dispatch(setUser({ user: decode, token: res.data.token }));
+    router.push("/");
+  };
 
   return (
     <>
@@ -26,8 +33,7 @@ export const LoginForm = () => {
         </div>
 
         <div className="mt-5">
-          {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-y-4">
               <div>
                 <label
@@ -40,7 +46,7 @@ export const LoginForm = () => {
                   <input
                     type="email"
                     id="email"
-                    // {...register("email")}
+                    {...register("email")}
                     name="email"
                     className="py-3 px-4 block w-full border-red-200 rounded-lg text-sm border focus:border-red-500 focus:ring-red-500 appearance-none outline-none disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-white dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                     required
@@ -61,7 +67,7 @@ export const LoginForm = () => {
                   <input
                     type="password"
                     id="password"
-                    // {...register("password")}
+                    {...register("password")}
                     name="password"
                     className="py-3 px-4 block w-full border-red-200 rounded-lg text-sm border focus:border-red-500 focus:ring-red-500 appearance-none outline-none disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                     required
@@ -99,7 +105,7 @@ export const LoginForm = () => {
           </form>
 
           <p className="mt-2 text-sm text-neutral-700 dark:text-neutral-400">
-            Don`t have an account yet?{" "}
+            Don`t have an account yet?
             <Link
               className="text-red-600 decoration-2 hover:underline font-medium dark:text-red-500"
               href="/register"
