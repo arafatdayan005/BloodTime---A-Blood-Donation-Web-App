@@ -16,6 +16,7 @@
 # production
 /build
 /src/components/shared/Navbar.tsx
+/src/components/UploadWidget.jsx
 
 # misc
 .DS_Store
@@ -36,3 +37,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 global.d.ts
+
+.vercel
