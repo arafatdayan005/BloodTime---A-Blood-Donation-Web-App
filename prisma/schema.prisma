@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgres://postgres.ktchgkxjokmmsumrxqgb:o9EilxKrd0VW3YR4@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+}
+
+model User {
+  id           String       @id @default(uuid())
+  name         String
+  email        String       @unique
+  password     String
+  bloodType    BloodGroup?
+  location     String?
+  profileImage String?
+  availability Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  donor        Request[]    @relation("donor")
+  requester    Request[]    @relation("requester")
+  UserProfile  UserProfile?
+
+  @@map("users")
+}
+
+model Request {
+  id              String        @id @default(uuid())
+  donorId         String
+  donor           User          @relation("donor", fields: [donorId], references: [id])
+  requesterId     String
+  requester       User          @relation("requester", fields: [requesterId], references: [id])
+  phoneNumber     String
+  dateOfDonation  String
+  hospitalName    String
+  hospitalAddress String
+  reason          String
+  requestStatus   RequestStatus @default(PENDING)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("requests")
+}
+
+model UserProfile {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  bio              String?
+  age              Int?
+  lastDonationDate String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User     @relation(fields: [userId], references: [id])
+
+  @@map("user_profiles")
+}
+
+enum BloodGroup {
+  A_POSITIVE
+  A_NEGATIVE
+  B_POSITIVE
+  B_NEGATIVE
+  AB_POSITIVE
+  AB_NEGATIVE
+  O_POSITIVE
+  O_NEGATIVE
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
